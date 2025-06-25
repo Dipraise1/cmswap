@@ -677,9 +677,9 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: responsive.getIconSize(48),
+    height: responsive.getIconSize(48),
+    borderRadius: responsive.getIconSize(48) / 2,
     backgroundColor: Colors.background,
     justifyContent: 'center',
     alignItems: 'center',

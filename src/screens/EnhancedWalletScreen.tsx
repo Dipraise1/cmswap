@@ -17,8 +17,10 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../constants/Colors';
 import { ActionModals } from '../components/ActionModals';
+import { responsive, scale, moderateScale, getResponsiveValue, isTablet } from '../utils/responsive';
 
-const { width: screenWidth } = Dimensions.get('window');
+// Responsive screen width
+const getScreenWidth = () => responsive.getDimensions().width;
 
 // Crypto tokens with real portfolio balances and CoinGecko images
 const baseTokens = [
@@ -574,7 +576,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   cardContainer: {
-    paddingHorizontal: screenWidth > 400 ? 20 : 16,
+    paddingHorizontal: getScreenWidth() > 400 ? 20 : 16,
     paddingTop: 50,
     paddingBottom: 24,
   },
@@ -631,7 +633,7 @@ const styles = StyleSheet.create({
   },
   balanceAmount: {
     color: 'white',
-    fontSize: screenWidth > 400 ? 36 : 32,
+    fontSize: getScreenWidth() > 400 ? 36 : 32,
     fontWeight: 'bold',
     marginBottom: 6,
   },
@@ -652,13 +654,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: responsive.getActionButtonSize(),
+    height: responsive.getActionButtonSize(),
+    borderRadius: responsive.getActionButtonSize() / 2,
     backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: responsive.getSpacing(8),
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.3)',
   },
@@ -670,8 +672,8 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    paddingHorizontal: responsive.getPadding().horizontal,
+    marginBottom: responsive.getSpacing(20),
     alignItems: 'center',
   },
   tab: {
@@ -705,13 +707,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tokenIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: responsive.getIconSize(44),
+    height: responsive.getIconSize(44),
+    borderRadius: responsive.getIconSize(44) / 2,
     backgroundColor: Colors.backgroundSecondary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
+    marginRight: responsive.getSpacing(12),
     borderWidth: 1,
     borderColor: Colors.border,
   },

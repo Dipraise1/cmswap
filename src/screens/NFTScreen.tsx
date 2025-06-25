@@ -14,9 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { Colors } from '../constants/Colors';
 import AdvancedHeader from '../components/AdvancedHeader';
-
-const { width } = Dimensions.get('window');
-const itemWidth = (width - 60) / 2;
+import { responsive } from '../utils/responsive';
 
 interface NFT {
   id: string;
@@ -220,22 +218,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   nftItem: {
-    width: itemWidth,
+    width: (responsive.getDimensions().width - responsive.getPadding().horizontal * 2 - responsive.getSpacing(12)) / responsive.getGridColumns(),
     backgroundColor: Colors.surface,
-    borderRadius: 20,
-    marginBottom: 20,
+    borderRadius: responsive.getCardSize().borderRadius,
+    marginBottom: responsive.getSpacing(20),
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: Colors.primary + '20',
     elevation: 8,
     shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: responsive.getSpacing(4) },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: responsive.getSpacing(8),
   },
   nftImageContainer: {
     width: '100%',
-    height: itemWidth,
+    aspectRatio: 1,
     position: 'relative',
   },
   nftImage: {

@@ -63,10 +63,11 @@ class ResponsiveManager {
   public getScreenType(): 'small' | 'medium' | 'large' | 'xlarge' {
     const { width } = this.dimensions;
     
-    if (width < 400) return 'small';
-    if (width < 768) return 'medium';
-    if (width < 1024) return 'large';
-    return 'xlarge';
+    // Updated breakpoints for better Android device support
+    if (width < 360) return 'small';      // Small phones (older Android)
+    if (width < 768) return 'medium';     // Standard phones and phablets
+    if (width < 1024) return 'large';     // Small tablets and large phones
+    return 'xlarge';                      // Large tablets and foldables
   }
 
   public isTablet(): boolean {
@@ -121,13 +122,13 @@ class ResponsiveManager {
     
     switch (screenType) {
       case 'small':
-        return isLandscape ? 3 : 2;
+        return isLandscape ? 3 : 2;      // Small phones: 2 portrait, 3 landscape
       case 'medium':
-        return isLandscape ? 4 : 2;
+        return isLandscape ? 4 : 2;      // Standard phones: 2 portrait, 4 landscape
       case 'large':
-        return isLandscape ? 5 : 3;
+        return isLandscape ? 5 : 3;      // Large phones/small tablets: 3 portrait, 5 landscape
       case 'xlarge':
-        return isLandscape ? 6 : 4;
+        return isLandscape ? 6 : 4;      // Large tablets: 4 portrait, 6 landscape
       default:
         return 2;
     }

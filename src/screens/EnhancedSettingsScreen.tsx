@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors';
 import { FloatingLogo } from '../components/FloatingLogo';
+import { responsive } from '../utils/responsive';
 
 interface SettingsItem {
   id: string;

@@ -15,8 +15,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors';
-
-const { width: screenWidth } = Dimensions.get('window');
+import { responsive } from '../utils/responsive';
 
 // Real crypto tokens with live data structure
 const availableTokens = [
