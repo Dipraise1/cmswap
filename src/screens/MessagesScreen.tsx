@@ -19,7 +19,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors';
 import { responsive } from '../utils/responsive';
 
@@ -87,6 +87,7 @@ interface Chat {
 }
 
 const MessagesScreen: React.FC = () => {
+  const insets = useSafeAreaInsets();
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [messageText, setMessageText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,6 +96,9 @@ const MessagesScreen: React.FC = () => {
   const [newContactName, setNewContactName] = useState('');
   const [newContactAddress, setNewContactAddress] = useState('');
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
+  
+  // Tab bar height (approximately 80px including padding)
+  const TAB_BAR_HEIGHT = 80;
 
   const [contacts, setContacts] = useState<Contact[]>([
     {
@@ -318,7 +322,7 @@ const MessagesScreen: React.FC = () => {
         <KeyboardAvoidingView 
           style={styles.chatContainer}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? TAB_BAR_HEIGHT : 0}
         >
           <View style={styles.chatHeader}>
             <TouchableOpacity 
@@ -387,11 +391,16 @@ const MessagesScreen: React.FC = () => {
             }}
             keyExtractor={(item) => item.id}
             style={styles.messagesList}
-            contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+            contentContainerStyle={{ 
+              padding: 16, 
+              paddingBottom: TAB_BAR_HEIGHT + insets.bottom + 16 
+            }}
             inverted
           />
           
-          <View style={styles.inputAreaContainer}>
+          <View style={[styles.inputAreaContainer, { 
+            paddingBottom: TAB_BAR_HEIGHT + insets.bottom 
+          }]}>
             {/* Reply Preview */}
             {replyingTo && (
               <View style={styles.replyPreview}>
@@ -493,6 +502,9 @@ const MessagesScreen: React.FC = () => {
           renderItem={renderChatItem}
           keyExtractor={(item) => item.id}
           style={styles.list}
+          contentContainerStyle={{ 
+            paddingBottom: TAB_BAR_HEIGHT + insets.bottom 
+          }}
           showsVerticalScrollIndicator={false}
         />
       ) : (
@@ -504,6 +516,9 @@ const MessagesScreen: React.FC = () => {
           renderItem={renderContactItem}
           keyExtractor={(item) => item.id}
           style={styles.list}
+          contentContainerStyle={{ 
+            paddingBottom: TAB_BAR_HEIGHT + insets.bottom 
+          }}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={() => (
             <TouchableOpacity 
