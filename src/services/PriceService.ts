@@ -299,6 +299,18 @@ class PriceService {
     });
   }
 
+  async getPortfolioTokens(): Promise<PortfolioToken[]> {
+    // Default portfolio for demo purposes
+    const defaultPortfolio = [
+      { symbol: 'SOL', balance: 12.5847 },
+      { symbol: 'ETH', balance: 0.8923 },
+      { symbol: 'USDC', balance: 2547.32 },
+      { symbol: 'BTC', balance: 0.0234 },
+    ];
+    
+    return this.getPortfolioData(defaultPortfolio);
+  }
+
   // Start price updates with improved error handling
   startPriceUpdates(callback: (prices: TokenPrice[]) => void, tokens: string[], intervalMs: number = 45000) {
     let consecutiveErrors = 0;

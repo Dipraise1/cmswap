@@ -120,7 +120,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onFinish }) => {
               style={styles.iconGradient}
             >
               <Image
-                source={require('../../c5bd744e-de62-48d6-bc88-db9c6ba613cc.jpeg')}
+                source={require('../../assets/cmswap-logo.jpeg')}
                 style={styles.customIcon}
                 resizeMode="cover"
               />

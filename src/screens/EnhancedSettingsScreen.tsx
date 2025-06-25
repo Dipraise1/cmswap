@@ -50,8 +50,31 @@ const EnhancedSettingsScreen: React.FC = () => {
 
   const [showSecurityModal, setShowSecurityModal] = useState(false);
   const [showBackupModal, setShowBackupModal] = useState(false);
+  const [showWalletModal, setShowWalletModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [walletName, setWalletName] = useState('');
+  const [walletAddress, setWalletAddress] = useState('');
+  const [walletType, setWalletType] = useState<'import' | 'create' | 'manage'>('create');
+  
+  const [wallets, setWallets] = useState([
+    {
+      id: '1',
+      name: 'Main Wallet',
+      address: '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM',
+      type: 'SOL',
+      isActive: true,
+      balance: 124.52,
+    },
+    {
+      id: '2',
+      name: 'Trading Wallet',
+      address: '0x742d35Cc6665C0532846a62EFFA662D2478B54F3',
+      type: 'ETH',
+      isActive: false,
+      balance: 3.24,
+    },
+  ]);
   
   const slideAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
@@ -92,6 +115,45 @@ const EnhancedSettingsScreen: React.FC = () => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 
+  const handleAddWallet = () => {
+    if (!walletName.trim()) {
+      Alert.alert('Error', 'Please enter a wallet name');
+      return;
+    }
+
+    if (walletType === 'import' && !walletAddress.trim()) {
+      Alert.alert('Error', 'Please enter a valid wallet address');
+      return;
+    }
+
+    const newWallet = {
+      id: Date.now().toString(),
+      name: walletName.trim(),
+      address: walletType === 'create' ? 
+        `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}` :
+        walletAddress.trim(),
+      type: 'SOL',
+      isActive: false,
+      balance: 0,
+    };
+
+    setWallets(prev => [...prev, newWallet]);
+    setWalletName('');
+    setWalletAddress('');
+    setShowWalletModal(false);
+    Alert.alert('Success', `${walletType === 'create' ? 'New wallet created' : 'Wallet imported'} successfully!`);
+  };
+
+  const handleSwitchWallet = (walletId: string) => {
+    setWallets(prev => 
+      prev.map(wallet => ({
+        ...wallet,
+        isActive: wallet.id === walletId
+      }))
+    );
+    Alert.alert('Wallet Switched', 'Active wallet updated successfully!');
+  };
+
   const showConfirmDialog = (title: string, message: string, onConfirm: () => void) => {
     Alert.alert(
       title,
@@ -104,6 +166,47 @@ const EnhancedSettingsScreen: React.FC = () => {
   };
 
   const sections: SettingsSection[] = [
+    {
+      title: 'Wallet Management',
+      items: [
+        {
+          id: 'manage_wallets',
+          title: 'Manage Wallets',
+          subtitle: `${wallets.length} wallets • ${wallets.find(w => w.isActive)?.name}`,
+          icon: 'wallet',
+          type: 'action',
+          onPress: () => {
+            setWalletType('manage');
+            setShowWalletModal(true);
+          },
+          gradient: [Colors.brightBlue, Colors.accent],
+        },
+        {
+          id: 'import_wallet',
+          title: 'Import Wallet',
+          subtitle: 'Add existing wallet with seed phrase',
+          icon: 'download',
+          type: 'action',
+          onPress: () => {
+            setWalletType('import');
+            setShowWalletModal(true);
+          },
+          gradient: [Colors.success, '#00A844'],
+        },
+        {
+          id: 'create_wallet',
+          title: 'Create New Wallet',
+          subtitle: 'Generate a new wallet address',
+          icon: 'add-circle',
+          type: 'action',
+          onPress: () => {
+            setWalletType('create');
+            setShowWalletModal(true);
+          },
+          gradient: [Colors.primary, Colors.primaryDark],
+        },
+      ],
+    },
     {
       title: 'Security & Privacy',
       items: [
@@ -515,6 +618,121 @@ const EnhancedSettingsScreen: React.FC = () => {
           </Animated.View>
         </BlurView>
       </Modal>
+
+      {/* Wallet Management Modal */}
+      <Modal
+        visible={showWalletModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowWalletModal(false)}
+      >
+        <BlurView intensity={100} style={styles.modalOverlay}>
+          <Animated.View style={[styles.modalContent, { transform: [{ scale: scaleAnim }] }]}>
+            <LinearGradient
+              colors={[Colors.surface, Colors.background]}
+              style={styles.modalGradient}
+            >
+              <Text style={styles.modalTitle}>
+                {walletType === 'create' ? 'Create New Wallet' : 
+                 walletType === 'import' ? 'Import Wallet' : 'Manage Wallets'}
+              </Text>
+
+              {walletType !== 'manage' ? (
+                <>
+                  <TextInput
+                    style={styles.modalInput}
+                    placeholder="Wallet Name"
+                    placeholderTextColor={Colors.textSecondary}
+                    value={walletName}
+                    onChangeText={setWalletName}
+                  />
+
+                  {walletType === 'import' && (
+                    <TextInput
+                      style={styles.modalInput}
+                      placeholder="Wallet Address or Seed Phrase"
+                      placeholderTextColor={Colors.textSecondary}
+                      value={walletAddress}
+                      onChangeText={setWalletAddress}
+                      multiline
+                    />
+                  )}
+
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity
+                      style={styles.modalButton}
+                      onPress={() => setShowWalletModal(false)}
+                    >
+                      <Text style={styles.modalButtonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.modalButtonPrimary} onPress={handleAddWallet}>
+                      <LinearGradient
+                        colors={[Colors.brightBlue, Colors.accent]}
+                        style={styles.modalButtonGradient}
+                      >
+                        <Text style={styles.modalButtonTextPrimary}>
+                          {walletType === 'create' ? 'Create' : 'Import'}
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              ) : (
+                <>
+                  <ScrollView style={{ maxHeight: 300 }}>
+                    {wallets.map((wallet) => (
+                      <TouchableOpacity
+                        key={wallet.id}
+                        style={[
+                          styles.walletItem,
+                          wallet.isActive && styles.activeWalletItem
+                        ]}
+                        onPress={() => handleSwitchWallet(wallet.id)}
+                      >
+                        <View style={styles.walletInfo}>
+                          <Text style={styles.walletName}>{wallet.name}</Text>
+                          <Text style={styles.walletAddress}>
+                            {wallet.address.slice(0, 6)}...{wallet.address.slice(-6)}
+                          </Text>
+                          <Text style={styles.walletBalance}>
+                            {wallet.balance} {wallet.type}
+                          </Text>
+                        </View>
+                        {wallet.isActive && (
+                          <Ionicons name="checkmark-circle" size={24} color={Colors.success} />
+                        )}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity
+                      style={styles.modalButton}
+                      onPress={() => setShowWalletModal(false)}
+                    >
+                      <Text style={styles.modalButtonText}>Close</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={styles.modalButtonPrimary} 
+                      onPress={() => {
+                        setWalletType('create');
+                        // Keep modal open to switch to create mode
+                      }}
+                    >
+                      <LinearGradient
+                        colors={[Colors.primary, Colors.accent]}
+                        style={styles.modalButtonGradient}
+                      >
+                        <Text style={styles.modalButtonTextPrimary}>Add New</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+            </LinearGradient>
+          </Animated.View>
+        </BlurView>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -740,6 +958,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.text,
     fontWeight: '700',
+  },
+  walletItem: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.06)',
+  },
+  activeWalletItem: {
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+  },
+  walletInfo: {
+    flex: 1,
+  },
+  walletName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text,
+    marginBottom: 2,
+  },
+  walletAddress: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+  },
+  walletBalance: {
+    fontSize: 12,
+    color: Colors.textTertiary,
   },
 });
 

@@ -8,6 +8,7 @@ import {
   ScrollView,
   Animated,
   Image,
+  StatusBar,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -135,7 +136,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
               <FloatingLogo size={128} showPulse={true} />
             ) : (
               <LinearGradient
-                colors={slide.gradient}
+                colors={slide.gradient as [string, string]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.iconGradient}
@@ -196,7 +197,8 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor={Colors.background} translucent={false} />
       {/* Skip Button */}
       <TouchableOpacity style={styles.skipButton} onPress={onComplete}>
         <Text style={styles.skipText}>Skip</Text>
@@ -245,7 +247,7 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onComplete }) => {
           </TouchableOpacity>
         </View>
       </BlurView>
-    </SafeAreaView>
+    </View>
   );
 };
 

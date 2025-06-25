@@ -94,7 +94,7 @@ export const TokenImage: React.FC<TokenImageProps> = ({
           borderRadius,
         }}
         onError={handleImageError}
-        onLoad={() => console.log(`Successfully loaded ${symbol} image from source ${currentImageIndex + 1}`)}
+                  onLoad={() => {}}
       />
     </View>
   );

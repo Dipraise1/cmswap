@@ -3,6 +3,7 @@
     "name": "CMSWAP",
     "slug": "cmswap",
     "version": "1.0.0",
+    "sdkVersion": "53.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -38,6 +39,11 @@
     "plugins": [
       "expo-secure-store",
       "expo-notifications"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2494124b-d8d3-49c8-89a7-87c441d2bc61"
+      }
+    }
   }
-} 
+}

@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { EnhancedTabBar } from './src/components/EnhancedTabBar';
 
 import LoadingScreen from './src/screens/LoadingScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
@@ -53,104 +54,16 @@ export default function App() {
       >
         <StatusBar style="light" backgroundColor={Colors.background} />
         <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName: keyof typeof Ionicons.glyphMap;
-
-              if (route.name === 'Wallet') {
-                iconName = focused ? 'wallet' : 'wallet-outline';
-              } else if (route.name === 'Messages') {
-                iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
-              } else if (route.name === 'Swap') {
-                iconName = focused ? 'swap-horizontal' : 'swap-horizontal-outline';
-              } else if (route.name === 'NFT') {
-                iconName = focused ? 'diamond' : 'diamond-outline';
-              } else if (route.name === 'Settings') {
-                iconName = focused ? 'settings' : 'settings-outline';
-              } else {
-                iconName = 'ellipse';
-              }
-
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: Colors.primary,
-            tabBarInactiveTintColor: Colors.textSecondary,
-            tabBarStyle: {
-              backgroundColor: Colors.surface,
-              borderTopColor: 'transparent',
-              borderTopWidth: 0,
-              paddingBottom: 8,
-              paddingTop: 8,
-              height: 88,
-              shadowColor: Colors.primary,
-              shadowOffset: {
-                width: 0,
-                height: -4,
-              },
-              shadowOpacity: 0.1,
-              shadowRadius: 12,
-              elevation: 8,
-            },
-            tabBarItemStyle: {
-              paddingVertical: 4,
-            },
-            tabBarLabelStyle: {
-              fontSize: 12,
-              fontWeight: '600',
-              marginTop: 4,
-            },
-            headerStyle: {
-              backgroundColor: Colors.surface,
-              shadowColor: 'transparent',
-              elevation: 0,
-            },
-            headerTintColor: Colors.text,
-            headerTitleStyle: {
-              fontWeight: '600',
-              fontSize: 18,
-            },
-          })}
+          tabBar={(props) => <EnhancedTabBar {...props} />}
+          screenOptions={{
+            headerShown: false,
+          }}
         >
-          <Tab.Screen 
-            name="Wallet" 
-            component={EnhancedWalletScreen}
-            options={{ 
-              headerShown: false,
-              tabBarLabel: 'Wallet',
-            }}
-          />
-          <Tab.Screen 
-            name="Messages" 
-            component={MessagesScreen}
-            options={{ 
-              headerShown: false,
-              tabBarLabel: 'Messages',
-            }}
-          />
-          <Tab.Screen 
-            name="Swap" 
-            component={SwapScreen}
-            options={{ 
-              headerShown: false,
-              tabBarLabel: 'Swap',
-            }}
-          />
-          <Tab.Screen 
-            name="NFT" 
-            component={NFTScreen}
-            options={{ 
-              headerShown: false,
-              tabBarLabel: 'NFTs',
-            }}
-          />
-          <Tab.Screen 
-            name="Settings" 
-            component={EnhancedSettingsScreen}
-            options={{ 
-              headerShown: false,
-              tabBarLabel: 'Settings',
-            }}
-          />
+          <Tab.Screen name="Wallet" component={EnhancedWalletScreen} />
+          <Tab.Screen name="Messages" component={MessagesScreen} />
+          <Tab.Screen name="Swap" component={SwapScreen} />
+          <Tab.Screen name="NFT" component={NFTScreen} />
+          <Tab.Screen name="Settings" component={EnhancedSettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
