@@ -528,31 +528,6 @@ export const EnhancedWalletScreen: React.FC = () => {
           imageUrl: token.imageUrl,
         }))}
       />
-
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="home" size={24} color={Colors.brightBlue} />
-          <Text style={[styles.navText, { color: Colors.brightBlue }]}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="trending-up" size={24} color={Colors.textSecondary} />
-          <Text style={styles.navText}>Trade</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="gift" size={24} color={Colors.textSecondary} />
-          <Text style={styles.navText}>Rewards</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="apps" size={24} color={Colors.textSecondary} />
-          <Text style={styles.navText}>Apps</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <View style={styles.notificationDot} />
-          <Ionicons name="settings" size={24} color={Colors.textSecondary} />
-          <Text style={styles.navText}>Settings</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -573,7 +548,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingTop: 20,
-    paddingBottom: 100,
+    paddingBottom: 20,
   },
   cardContainer: {
     paddingHorizontal: getScreenWidth() > 400 ? 20 : 16,
@@ -753,39 +728,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: Colors.textSecondary,
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    backgroundColor: Colors.surface,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    paddingBottom: 36,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 6,
-    position: 'relative',
-  },
-  navText: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-  },
-  notificationDot: {
-    position: 'absolute',
-    top: -2,
-    right: 10,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#ef4444',
-    zIndex: 1,
   },
 
   tokenItemInner: {
